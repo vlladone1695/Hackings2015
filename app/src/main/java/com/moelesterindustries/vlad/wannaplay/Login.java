@@ -15,7 +15,7 @@ public class Login extends AppCompatActivity {
 
         Log.i("AppInfo", String.valueOf(usernameField.getText()));
         Log.i("AppInfo", String.valueOf(passwordField.getText()));
-        
+
     }
 
     @Override

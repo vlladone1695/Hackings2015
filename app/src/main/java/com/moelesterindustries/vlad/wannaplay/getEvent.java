@@ -1,12 +1,15 @@
 package com.moelesterindustries.vlad.wannaplay;
 
 import android.app.Activity;
+import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,19 +27,22 @@ import java.util.List;
 /**
  * Created by vlad on 12/10/2015.
  */
-public class getEvent extends AppCompatActivity {
+public class getEvent extends FragmentActivity{
 
     ArrayList<String> timestamp = new ArrayList<String>();
     ArrayList<String> sport = new ArrayList<String>();
-    ArrayList<String> team_name = new ArrayList<String>();
-    ArrayList<String> medium_age = new ArrayList<String>();
+
+
     ArrayList<String> city = new ArrayList<String>();
     ArrayList<String> country = new ArrayList<String>();
     ArrayList<String> event_date = new ArrayList<String>();
-    ArrayList<String> event_date2 = new ArrayList<String>();
+    ArrayList<String> members = new ArrayList<String>();
+
 
     ListView liste;
     BaseAdapterClass adapter;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,10 @@ public class getEvent extends AppCompatActivity {
 //        init();
 //        outputLine("Request started...");
         new getData().execute("http://webzard.com/databases/android/wannaplay/getevents.php");
+
+
+
+
     }
 
     private class getData extends AsyncTask<String,Double,JSONArray> {
@@ -68,12 +78,12 @@ public class getEvent extends AppCompatActivity {
                 {
                     output.write(buffer,0,bufferLength);
                 }
-             //   outputLine("Success1!");
+                //   outputLine("Success1!");
                 return new JSONArray(output.toString("UTF-8"));
 
             }catch (Exception e){
 
-             //   outputLine("Something went wrong1!");
+                //   outputLine("Something went wrong1!");
                 return null;
             }
         }
@@ -90,23 +100,24 @@ public class getEvent extends AppCompatActivity {
 
                     timestamp.add("Posted on: "+l.getString("timestamp"));
                     sport.add(l.getString("sport"));
-                    team_name.add("Team: "+l.getString("team_name"));
-                    medium_age.add("Team age: "+l.getString("medium_age"));
+
                     city.add("Location: "+l.getString("city")+",");
                     country.add(l.getString("country"));
-                    event_date.add("Available: "+l.getString("event_date")+" -");
-                    event_date2.add(l.getString("event_date2"));
+                    event_date.add("Available: "+l.getString("event_date"));
+                    members.add("Players: "+l.getString("members"));
+
+
 //System.out.println("!!");
-                //    outputLine(l.getString("timestamp"));
-                //    outputLine("Success2!");
+                    //    outputLine(l.getString("timestamp"));
+                    //    outputLine("Success2!");
 
                 }
-                adapter = new BaseAdapterClass(getEvent.this,timestamp,sport,team_name,medium_age,city,country,event_date,event_date2);
+                adapter = new BaseAdapterClass(getEvent.this,timestamp,sport,city,country,event_date,members);
                 liste.setAdapter(adapter);
 
             }catch (Exception e)
             {
-            //    outputLine("Something went wrong2!");
+                //    outputLine("Something went wrong2!");
             }
         }
     }
@@ -119,5 +130,7 @@ public class getEvent extends AppCompatActivity {
         output += (new DateTime()).toString("HH:mm:ss") + " <strong>" + s + "</strong><br />";
         outputView.setText(Html.fromHtml(output));
     }
+
+
 
 }
